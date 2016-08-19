@@ -1,0 +1,27 @@
+{
+  "name": "React-Kanban",
+  "version": "1.0.0",
+  "description": "> A digital Kanban board made with React",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tanachi/React-Kanban.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tanachi/React-Kanban/issues"
+  },
+  "homepage": "https://github.com/Tanachi/React-Kanban#readme",
+  "devDependencies": {
+    "express": "^4.14.0",
+    "sequelize": "^3.24.0"
+  },
+  "dependencies": {
+    "pg": "^6.1.0"
+  }
+}
