@@ -14,7 +14,20 @@ var Card = React.createClass({
       type: 'PUT',
       data: card,
       success: function(data) {
-        console.log("Oout of thiime");
+        location.reload();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  handleDeleteSubmit: function (argument) {
+    $.ajax({
+      url: "/cards/" + this.props.cardID,
+      dataType: 'json',
+      type: 'DELETE',
+      data: {id:this.props.cardID},
+      success: function(data) {
         location.reload();
       }.bind(this),
       error: function(xhr, status, err) {
@@ -50,6 +63,7 @@ var Card = React.createClass({
         >
           {optionsList}
         </select>
+        <button onClick={this.handleDeleteSubmit}>DELETE THIS</button>
       </div>
     );
   }
