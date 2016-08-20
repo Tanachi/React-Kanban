@@ -18,7 +18,7 @@ var Card = React.createClass({
     );
   }
 });
-var QueueList = React.createClass({
+var CardList = React.createClass({
   render: function() {
     var cardNodes = this.props.data.map(function(card) {
       return (
@@ -28,47 +28,12 @@ var QueueList = React.createClass({
       );
     });
     return (
-      <div className="queueList">
+      <div className="cardList">
         {cardNodes}
       </div>
     );
   }
 });
-
-var ProgressList = React.createClass({
-  render: function() {
-    var cardNodes = this.props.data.map(function(card) {
-      return (
-        <Card title={card.title} creation={card.createdBy}
-          assigned={card.assignedBy} priority={card.priority}  key={card.id}>
-        </Card>
-      );
-    });
-    return (
-      <div className="progressList">
-        {cardNodes}
-      </div>
-    );
-  }
-});
-
-var DoneList = React.createClass({
-  render: function() {
-    var cardNodes = this.props.data.map(function(card) {
-      return (
-        <Card title={card.title} creation={card.createdBy}
-          assigned={card.assignedBy} priority={card.priority}  key={card.id}>
-        </Card>
-      );
-    });
-    return (
-      <div className="doneList">
-        {cardNodes}
-      </div>
-    );
-  }
-});
-
 var CardForm = React.createClass({
   getInitialState: function() {
     return {title: '', createdBy: '', assignedBy:'', priority:''};
@@ -165,6 +130,7 @@ var CardBox = React.createClass({
       data: card,
       success: function(data) {
         this.setState({data: data});
+        location.reload();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -181,9 +147,9 @@ var CardBox = React.createClass({
     return (
       <div className="cardBox">
         <h1>Kaban Cards</h1>
-          <DoneList data={this.state.done} />
-          <QueueList data={this.state.queue} />
-          <ProgressList data={this.state.progress} />
+          <CardList data={this.state.done} />
+          <CardList data={this.state.queue} />
+          <CardList data={this.state.progress} />
           <CardForm onCardSubmit={this.handleCardSubmit} />
       </div>
     );
@@ -191,6 +157,6 @@ var CardBox = React.createClass({
 });
 
 ReactDOM.render(
-   <CardBox />,
-    document.getElementById('app')
-  );
+  <CardBox />,
+  document.getElementById('app')
+);

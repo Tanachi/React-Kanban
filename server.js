@@ -26,7 +26,7 @@ app.route('/cards')
                   createdBy:req.body.createdBy, assignedBy:req.body.createdBy,
                   status: "Queue", priority: req.body.priority})
     .then(function (argument) {
-      res.redirect('/');
+      res.json(argument);
     });
   })
   .put(function(req, res) {
