@@ -34,7 +34,6 @@ app.put(/\/cards\/\d+/, function(req, res) {
   var split = req.url.split('/');
   var numID = split[2];
   Cards.update({
-    console.log(req.body.status);
     status: req.body.status,
   }, {
   where: {
