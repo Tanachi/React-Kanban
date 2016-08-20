@@ -23,15 +23,27 @@ app.route('/cards')
   })
   .post(function(req, res) {
     Cards.create({title: req.body.title,
-                  createdBy:req.body.createdBy, assignedBy:req.body.createdBy,
+                  createdBy:req.body.createdBy, assignedBy:req.body.assignedBy,
                   status: "Queue", priority: req.body.priority})
     .then(function (argument) {
       res.json(argument);
     });
   })
-  .put(function(req, res) {
-    res.send('Update the book');
-  })
+
+app.put(/\/cards\/\d+/, function(req, res) {
+  var split = req.url.split('/');
+  var numID = split[2];
+  Cards.update({
+    console.log(req.body.status);
+    status: req.body.status,
+  }, {
+  where: {
+    id: numID
+  }
+  }).then(function(argument) {
+    res.json(argument);
+  });
+});
 
 
 var server = app.listen(3000, function(){
