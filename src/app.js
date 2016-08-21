@@ -14,7 +14,7 @@ var Card = React.createClass({
       type: 'PUT',
       data: card,
       success: function(data) {
-        location.reload();
+        this.props.updater(this.props.cardID, card.status);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -70,9 +70,11 @@ var Card = React.createClass({
 });
 var CardList = React.createClass({
   render: function() {
-    var cardNodes = this.props.data.map(function(card) {
+    var updater = this.props.updater;
+    var dataArray = this.props.data.filter(this.props.cleaner);
+    var cardNodes = dataArray.map(function(card) {
       return (
-        <Card cardID={card.id} status={card.status} title={card.title} creation={card.createdBy}
+        <Card updater={updater} cardID={card.id} status={card.status} title={card.title} creation={card.createdBy}
           assigned={card.assignedBy} priority={card.priority}  key={card.id}>
         </Card>
       );
@@ -157,10 +159,7 @@ var CardBox = React.createClass({
       dataType: "json",
       cache: false,
       success: function(data) {
-        var queueArray = data.filter(isQueue);
-        var doneArray = data.filter(isDone);
-        var progressArray = data.filter(isProgess);
-        this.setState({queue: queueArray, done:doneArray, progress:progressArray});
+        this.setState({data:data});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -183,18 +182,27 @@ var CardBox = React.createClass({
     });
   },
   getInitialState: function() {
-    return {done: [], queue: [], progress: []};
+    return {data: []};
   },
   componentDidMount: function() {
     this.loadCardsFromServer();
+  },
+  updateBoardState: function(id, status) {
+    var newData = this.state.data;
+    newData.forEach(function(element, index, array) {
+      if(element.id === id){
+        element.status = status;
+      }
+    });
+    this.setState({data:newData});
   },
   render: function() {
     return (
       <div className="cardBox">
         <h1>Kaban Cards</h1>
-          <CardList display={"Done"} data={this.state.done} />
-          <CardList display={"Queue"} data={this.state.queue} />
-          <CardList display={"In Progress"} data={this.state.progress} />
+          <CardList updater={this.updateBoardState} cleaner={isDone} display={"Done"}  data={this.state.data} />
+          <CardList updater={this.updateBoardState} cleaner={isProgress} display={"In Progress"} data={this.state.data} />
+          <CardList updater={this.updateBoardState} cleaner={isQueue} display={"Queue"} data={this.state.data} />
           <CardForm onCardSubmit={this.handleCardSubmit} />
       </div>
     );
@@ -227,7 +235,7 @@ function isDone(data) {
     return false;
   }
 }
-function isProgess(data) {
+function isProgress(data) {
   if ('status' in data  &&  data.status === "In Progress") {
     return true;
   }
