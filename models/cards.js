@@ -3,13 +3,16 @@ module.exports = function(sequelize, DataTypes) {
   var Cards = sequelize.define('Cards', {
     title: DataTypes.STRING,
     priority: DataTypes.STRING,
-    status: DataTypes.STRING,
     createdBy: DataTypes.STRING,
     assignedBy: DataTypes.STRING
   }, {
+    tableName: "Cards",
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        models.Cards.belongsTo(models.Status, {
+          foreignKey: 'status_id',
+          as: 'status'
+        });
       }
     }
   });

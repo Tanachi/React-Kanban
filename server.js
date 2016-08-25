@@ -17,14 +17,18 @@ app.use(express.static(__dirname + '/public'));
 
 app.route('/cards')
   .get(function(req, res) {
-    Cards.findAll().then(function(cards) {
-      res.json(cards);
+    Cards.findAll({include: [{
+      model: db.Status,
+      as: 'status',
+      required: true
+    }]}).then(function(data) {
+      res.json(data);
     });
   })
   .post(function(req, res) {
     Cards.create({title: req.body.title,
                   createdBy:req.body.createdBy, assignedBy:req.body.assignedBy,
-                  status: "Queue", priority: req.body.priority})
+                  status_id: 3, priority: req.body.priority})
     .then(function (argument) {
       res.json(argument);
     });
@@ -35,8 +39,9 @@ app.route(/\/cards\/\d+/)
   .put(function(req, res) {
     var split = req.url.split('/');
     var numID = split[2];
+    console.log(req.body);
     Cards.update({
-      status: req.body.status,
+      status_id: req.body.status_id,
     }, {
     where: {
       id: numID

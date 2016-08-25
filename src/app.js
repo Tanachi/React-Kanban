@@ -1,3 +1,5 @@
+import React from 'react';
+import {render} from 'react-dom'
 var Card = React.createClass({
   getInitialState: function() {
     return {status:this.props.status};
@@ -74,8 +76,14 @@ var CardList = React.createClass({
     var dataArray = this.props.data.filter(this.props.cleaner);
     var cardNodes = dataArray.map(function(card) {
       return (
-        <Card updater={updater} cardID={card.id} status={card.status} title={card.title} creation={card.createdBy}
-          assigned={card.assignedBy} priority={card.priority}  key={card.id}>
+        <Card updater={updater}
+              cardID={card.id}
+              status={card.status.name}
+              title={card.title}
+              creation={card.createdBy}
+              assigned={card.assignedBy}
+              priority={card.priority}
+              key={card.id}>
         </Card>
       );
     });
@@ -191,7 +199,7 @@ var CardBox = React.createClass({
     var newData = this.state.data;
     newData.forEach(function(element, index, array) {
       if(element.id === id){
-        element.status = status;
+        element.status.name = status;
       }
     });
     this.setState({data:newData});
@@ -200,9 +208,21 @@ var CardBox = React.createClass({
     return (
       <div className="cardBox">
         <h1>Kaban Cards</h1>
-          <CardList updater={this.updateBoardState} cleaner={isDone} display={"Done"}  data={this.state.data} />
-          <CardList updater={this.updateBoardState} cleaner={isProgress} display={"In Progress"} data={this.state.data} />
-          <CardList updater={this.updateBoardState} cleaner={isQueue} display={"Queue"} data={this.state.data} />
+          <CardList updater={this.updateBoardState}
+                    cleaner={isDone}
+                    display={"Done"}
+                    data={this.state.data}
+          />
+          <CardList updater={this.updateBoardState}
+                    cleaner={isProgress}
+                    display={"In Progress"}
+                    data={this.state.data}
+          />
+          <CardList updater={this.updateBoardState}
+                    cleaner={isQueue}
+                    display={"Queue"}
+                    data={this.state.data}
+          />
           <CardForm onCardSubmit={this.handleCardSubmit} />
       </div>
     );
@@ -225,10 +245,10 @@ function selectOptions(status) {
 }
 
 function isDone(data) {
-  if ('status' in data  &&  data.status === "Done") {
+  if(typeof(data) === 'string' && data === "Done"){
     return true;
   }
-  else if(typeof(data) === 'string' && data === "Done"){
+  else if ('name' in data.status  &&  data.status.name === "Done") {
     return true;
   }
   else {
@@ -236,10 +256,10 @@ function isDone(data) {
   }
 }
 function isProgress(data) {
-  if ('status' in data  &&  data.status === "In Progress") {
+  if(typeof(data) === 'string' && data === "In Progress"){
     return true;
   }
-  else if(typeof(data) === 'string' && data === "In Progress"){
+  else if ('name' in data.status  &&  data.status.name === "In Progress") {
     return true;
   }
   else {
@@ -247,10 +267,10 @@ function isProgress(data) {
   }
 }
 function isQueue(data) {
-  if ('status' in data  &&  data.status === "Queue") {
+  if(typeof(data) === 'string' && data === "Queue"){
     return true;
   }
-  else if(typeof(data) === 'string' && data === "Queue"){
+  else if ('name' in data.status  &&  data.status.name === "Queue") {
     return true;
   }
   else {
