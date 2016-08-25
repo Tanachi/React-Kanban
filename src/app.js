@@ -182,6 +182,7 @@ var CardBox = React.createClass({
       data: card,
       success: function(data) {
         this.setState({data: data});
+        console.log("hello");
         location.reload();
       }.bind(this),
       error: function(xhr, status, err) {
@@ -208,22 +209,24 @@ var CardBox = React.createClass({
     return (
       <div className="cardBox">
         <h1>Kaban Cards</h1>
-          <CardList updater={this.updateBoardState}
-                    cleaner={isDone}
-                    display={"Done"}
-                    data={this.state.data}
-          />
-          <CardList updater={this.updateBoardState}
-                    cleaner={isProgress}
-                    display={"In Progress"}
-                    data={this.state.data}
-          />
-          <CardList updater={this.updateBoardState}
-                    cleaner={isQueue}
-                    display={"Queue"}
-                    data={this.state.data}
-          />
-          <CardForm onCardSubmit={this.handleCardSubmit} />
+          <div className="cardStack">
+            <CardList updater={this.updateBoardState}
+                      cleaner={isDone}
+                      display={"Done"}
+                      data={this.state.data}
+            />
+            <CardList updater={this.updateBoardState}
+                      cleaner={isProgress}
+                      display={"In Progress"}
+                      data={this.state.data}
+            />
+            <CardList updater={this.updateBoardState}
+                      cleaner={isQueue}
+                      display={"Queue"}
+                      data={this.state.data}
+            />
+          </div>
+        <CardForm onCardSubmit={this.handleCardSubmit} />
       </div>
     );
   }
